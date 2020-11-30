@@ -1,29 +1,76 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+import Vue from "vue";
+import VueRouter from "vue-router";
+import Home from "../views/Home.vue";
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 const routes = [
   {
-    path: '/',
-    name: 'Home',
-    component: Home
+    path: "/",
+    name: "Home",
+    component: Home,
   },
   {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  }
-]
+    path: "/about",
+    name: "About",
+    component: () => import("../views/About.vue"),
+  },
+  {
+    path: "/community",
+    name: "Community",
+    component: () => import("../views/Community.vue"),
+  },
+  {
+    path: "/guides",
+    name: "Guides",
+    component: () => import("../views/Guides.vue"),
+  },
+  {
+    path: "/characters",
+    name: "Characters",
+    component: () => import("../views/Characters.vue"),
+  },
+  {
+    path: "/weapons",
+    name: "Weapons",
+    component: () => import("../views/Weapons.vue"),
+  },
+  {
+    path: "/community/posts/:postId",
+    name: "Post",
+    component: () => import("../views/ViewPost.vue"),
+  },
+  {
+    path: "/community/create-post",
+    name: "CreatePost",
+    component: () => import("../views/CreatePost.vue"),
+  },
+  {
+    path: "/register",
+    name: "Register",
+    component: () => import("../views/Register.vue"),
+  },
+  {
+    path: "/login",
+    name: "Login",
+    component: () => import("../views/Login.vue"),
+  },
+  {
+    path: "/guides/create-guide",
+    name: "CreateGuide",
+    component: () => import("../views/CreateGuide.vue"),
+  },
+  {
+    path: "/guides/:guideId",
+    name: "Guide",
+    component: () => import("../views/ViewGuide.vue"),
+  },
+];
 
 const router = new VueRouter({
-  mode: 'history',
+  mode: "history",
   base: process.env.BASE_URL,
-  routes
-})
+  routes,
+});
 
-export default router
+export default router;

@@ -1,0 +1,38 @@
+import axios from "axios";
+
+const state = {
+  character: {},
+  characters: [],
+};
+
+const getters = {
+  currentCharacter: (state) => state.character,
+  allCharacters: (state) => state.characters,
+};
+
+const actions = {
+  getCharacter({ commit }, data) {
+    commit("viewCharacter", data);
+  },
+  async getAllCharacters({ commit }, data) {
+    let res = await axios.get("http://localhost:5000/api/characters");
+    commit("setCharacters", res.data);
+    return res;
+  },
+};
+
+const mutations = {
+  viewCharacter(state, character) {
+    state.character = character;
+  },
+  setCharacters(state, characters) {
+    state.characters = characters;
+  },
+};
+
+export default {
+  state,
+  getters,
+  actions,
+  mutations,
+};
