@@ -7,7 +7,7 @@
           <v-col
             v-for="guide in latestGuidesArray"
             :key="guide.id"
-            class="column-post"
+            class="column-post col-md-4"
           >
             <v-card class="pa-2 post" tile outlined @click="navigateTo(post)">
               <div class="home-title">{{ guide.title }}</div>
@@ -33,7 +33,7 @@
           <v-col
             v-for="post in latestPostsArray"
             :key="post.id"
-            class="column-post"
+            class="column-post col-md-4"
           >
             <v-card class="pa-2 post" tile outlined @click="navigateTo(post)">
               <div class="home-title">{{ post.title }}</div>
@@ -67,10 +67,16 @@ export default {
   computed: {
     ...mapGetters(["allPosts", "allGuides"]),
     latestPostsArray() {
-      return this.allPosts.slice(Math.max(this.allPosts.length - 3, 1));
+      if (this.allPosts.length > 3) {
+        return this.allPosts.slice(Math.max(this.allPosts.length - 3, 1));
+      }
+      return this.allPosts;
     },
     latestGuidesArray() {
-      return this.allGuides.slice(Math.max(this.allGuides.length - 3, 1));
+      if (this.allGuides.length > 3) {
+        return this.allGuides.slice(Math.max(this.allGuides.length - 3, 1));
+      }
+      return this.allGuides;
     },
   },
   data() {

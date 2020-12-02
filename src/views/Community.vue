@@ -4,15 +4,17 @@
       >Create Post</v-btn
     >
     <div class="post-container">
-      <div v-for="post in allPosts" :key="post.id" class="posts">
+      <div v-for="post in allPosts" :key="post._id" class="posts">
         <div class="cards">
           <v-card elevation="2" :hover="true" @click="navigateTo(post)">
-            <v-card-title>{{ post.id }} {{ post.title }}</v-card-title>
+            <v-card-title>{{ post.title }}</v-card-title>
             <v-card-subtitle>Posted by: {{ post.author }}</v-card-subtitle>
-            <v-card-text v-if="post.text.length > 450"
-              >{{ post.text.substring(0, 450) }}...</v-card-text
+            <v-card-text v-if="post.text.length > 240"
+              ><pre>{{ post.text.substring(0, 240) }}...</pre></v-card-text
             >
-            <v-card-text v-else>{{ post.text }}</v-card-text>
+            <v-card-text v-else>
+              <pre>{{ post.text }}</pre>
+            </v-card-text>
           </v-card>
         </div>
       </div>
@@ -59,6 +61,17 @@ export default {
 
   .cards {
     padding: 10px;
+
+    pre {
+      font-size: 14px;
+      font-family: Arial, Helvetica, sans-serif;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      white-space: -moz-pre-wrap;
+      white-space: -pre-wrap;
+      white-space: -o-pre-wrap;
+      word-wrap: break-word;
+    }
   }
 }
 </style>

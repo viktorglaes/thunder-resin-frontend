@@ -34,6 +34,13 @@ const actions = {
       commit("guide_error", err);
     }
   },
+  async updateGuide({ commit }, data) {
+    let res = await axios.put(
+      `http://localhost:5000/api/guides/${data.id}`,
+      data
+    );
+    return res;
+  },
 };
 
 const mutations = {

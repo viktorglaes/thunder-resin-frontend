@@ -1,70 +1,261 @@
 <template>
   <div class="viewpost-view">
     <v-icon
-      large
+      size="42"
       color="primary"
-      style="position: absolute; z-index: 2; left: 2px; top: 3px"
+      style="position: absolute; z-index: 2; left: 2px; top: 3px; background-color: white"
       @click="navigateBack"
     >
       mdi-chevron-left-circle
     </v-icon>
-    <v-card elevation="2" style="z-index: 1">
-      <v-card-title>{{ currentGuide.title }}</v-card-title>
-      <v-card-subtitle>{{ currentGuide.author }}</v-card-subtitle>
-      <v-card-text>{{ currentGuide.text }}</v-card-text>
+    <div style="display: flex; z-index: 1;">
+      <div>
+        <v-img
+          :src="currentGuide.character.img"
+          max-height="450"
+          min-height="430"
+          max-width="650"
+          min-width="650"
+          style="border: 1px solid gray; border-top-left-radius: 5px; border-top-right-radius: 5px; z-index: 1;"
+        ></v-img>
+        <v-card
+          dark
+          style="border-top-left-radius: 0px; border-top-right-radius: 0px;"
+        >
+          <v-card-title
+            >{{ currentGuide.character.name }}
+            <div class="layer">
+              <div style="margin: 0 0 5px 10px;">
+                <!-- Rarity: {{ character.rarity }} -->
+                <v-icon
+                  v-for="n in currentGuide.character.rarity"
+                  :key="n"
+                  right
+                  color="yellow"
+                >
+                  mdi-star
+                </v-icon>
+              </div>
+            </div>
+          </v-card-title>
+          <v-card-subtitle
+            >{{ currentGuide.character.type }} -
+            {{ currentGuide.character.weapon }}</v-card-subtitle
+          >
+          <div class="card-buttons">
+            <v-btn class="mx-2" fab dark small color="green" @click="voteUp">
+              <v-icon>
+                mdi-thumb-up
+              </v-icon>
+            </v-btn>
+
+            <v-btn class="mx-2" fab dark small color="red" @click="voteDown">
+              <v-icon>
+                mdi-thumb-down
+              </v-icon>
+            </v-btn>
+            <div style="display: flex">
+              <div style="color: green; position: absolute; left: 18px">
+                {{ upVotes }}
+              </div>
+              <div style="color: #b90e0e; position: absolute; right: 23px">
+                {{ downVotes }}
+              </div>
+            </div>
+          </div>
+        </v-card>
+      </div>
+
+      <div class="guide-card">
+        <v-card
+          elevation="2"
+          style="z-index: 1; min-height: 521px; margin-right: 10px;"
+          dark
+        >
+          <v-card-title>{{ currentGuide.title }} </v-card-title>
+          <v-card-subtitle>{{ currentGuide.playstyle }}</v-card-subtitle>
+
+          <div>
+            <v-card-title>Recommended Weapons</v-card-title>
+            <v-row>
+              <v-col
+                v-for="weapon in currentGuide.recommendedWeapons"
+                :key="weapon._id"
+                style="margin-left: 20px;"
+              >
+                <v-avatar size="80" style="margin: auto;">
+                  <img :src="weapon.img" alt="#" />
+                </v-avatar>
+              </v-col>
+            </v-row>
+          </div>
+
+          <div style="margin-bottom: 8px">
+            <v-card-title>Talent Priority</v-card-title>
+            <v-row>
+              <v-col
+                v-for="weapon in currentGuide.recommendedWeapons"
+                :key="weapon._id"
+                style="margin-left: 20px;"
+              >
+                <v-avatar size="80" style="margin: auto;">
+                  <img :src="weapon.img" alt="#" />
+                </v-avatar>
+              </v-col>
+            </v-row>
+          </div>
+          <v-divider></v-divider>
+          <v-card-text>
+            <pre> {{ currentGuide.text }} </pre></v-card-text
+          >
+        </v-card>
+      </div>
+    </div>
+
+    <!-- <div style="background-color: #1E1E1E; color: white; margin-top: 20px;">
+      <v-card-subtitle>By: {{ currentGuide.author }}</v-card-subtitle>
+    </div>
+    <v-text-field label="Regular"></v-text-field> -->
+
+    <v-card dark style="margin-top: 20px;">
+      <v-card-text>Written By: {{ currentGuide.author }}</v-card-text>
     </v-card>
 
-    <!-- <div class="comments">
+    <!-- consider moving cards closer to 5px or less -->
+
+    <div class="comment" v-if="isLoggedIn">
+      <v-text-field
+        style="margin-left: 5px; margin-top: 20px;"
+        placeholder="Comment..."
+        v-model="text"
+      ></v-text-field>
+      <div class="comment-buttons">
+        <v-btn style="margin-right: 5px" text @click="cancelComment"
+          >Cancel</v-btn
+        >
+        <v-btn color="primary" @click="submitComment">Comment</v-btn>
+      </div>
+    </div>
+    <div v-else class="comment">
+      <p style="margin: 20px 0 0 5px;">
+        Please <router-link to="/login">sign in</router-link> to comment.
+      </p>
+    </div>
+
+    <div class="comments">
       <template>
         <v-card class="mx-auto" tile>
-          <div v-for="comment in comments" :key="comment.id">
+          <div v-for="comment in allComments" :key="comment._id">
             <v-list-item>
               <v-list-item-content>
                 <v-list-item-subtitle>{{
                   comment.author
                 }}</v-list-item-subtitle>
-                <p>{{ comment.comment }}</p>
+                <p>{{ comment.text }}</p>
               </v-list-item-content>
             </v-list-item>
           </div>
         </v-card>
       </template>
-    </div> -->
+    </div>
   </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "ViewGuide",
   computed: {
-    ...mapGetters(["currentGuide"]),
+    ...mapGetters(["currentGuide", "user", "allComments", "isLoggedIn"]),
+    upVotes() {
+      let len = this.currentGuide.votes.filter((vote) => vote.type === 1)
+        .length;
+      if (len === undefined) {
+        return 0;
+      }
+      return this.currentGuide.votes.filter((vote) => vote.type === 1).length;
+    },
+    downVotes() {
+      let len = this.currentGuide.votes.filter((vote) => vote.type === 0)
+        .length;
+      if (len === undefined) {
+        return 0;
+      }
+      return this.currentGuide.votes.filter((vote) => vote.type === 0).length;
+    },
   },
   data() {
     return {
-      comments: [
-        {
-          author: "Tom",
-          id: 0,
-          comment: "Hello there",
-        },
-        {
-          author: "Tim",
-          id: 1,
-          comment: "Noice to have someone new join the community",
-        },
-        {
-          author: "Todd",
-          id: 2,
-          comment: "GTFO",
-        },
-      ],
+      text: null,
     };
   },
+  mounted() {
+    this.getAllComments(this.$route.params.guideId);
+  },
   methods: {
+    ...mapActions([
+      "getGuide",
+      "getProfile",
+      "getAllComments",
+      "createComment",
+      "updateGuide",
+    ]),
     navigateBack() {
       this.$router.push("/guides");
+    },
+    voteUp() {
+      let vote = {
+        userId: this.user._id,
+        type: 1,
+      };
+
+      this.currentGuide.votes.push(vote);
+
+      let guide = {
+        id: this.currentGuide._id,
+        votes: this.currentGuide.votes,
+      };
+
+      this.updateGuide(guide);
+    },
+    voteDown() {
+      let vote = {
+        userId: this.user._id,
+        type: 0,
+      };
+
+      this.currentGuide.votes.push(vote);
+
+      let guide = {
+        id: this.currentGuide._id,
+        votes: this.currentGuide.votes,
+      };
+
+      this.updateGuide(guide);
+    },
+    cancelComment() {
+      this.text = null;
+    },
+    submitComment() {
+      let branch = {
+        id: this.$route.params.guideId,
+        type: this.$route.name.toLowerCase(),
+      };
+
+      let comment = {
+        text: this.text,
+        author: this.user.username ? this.user.username : "Anonymous",
+        userId: this.user._id ? this.user._id : "",
+        branch: branch,
+      };
+
+      this.createComment(comment).then((res) => {
+        if (res.data.success) {
+          this.getAllComments(this.$route.params.guideId);
+          this.text = null;
+        }
+      });
     },
   },
 };
@@ -76,6 +267,37 @@ export default {
 
   .comments {
     margin-top: 20px;
+  }
+
+  pre {
+    font-size: 14px;
+    font-family: Arial, Helvetica, sans-serif;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    white-space: -moz-pre-wrap;
+    white-space: -pre-wrap;
+    white-space: -o-pre-wrap;
+    word-wrap: break-word;
+  }
+
+  .guide-card {
+    min-width: 965px;
+    max-width: 100%;
+    margin-left: 20px;
+  }
+
+  .card-buttons {
+    position: absolute;
+    right: 10px;
+    top: 25px;
+  }
+
+  .comment {
+    margin-bottom: 60px;
+    .comment-buttons {
+      position: absolute;
+      right: 20px;
+    }
   }
 }
 </style>

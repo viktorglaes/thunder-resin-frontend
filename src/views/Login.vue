@@ -56,7 +56,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["login"]),
+    ...mapActions(["login", "getProfile"]),
     loginUser() {
       let user = {
         username: this.username,
@@ -67,7 +67,8 @@ export default {
         .then((res) => {
           console.log(user, res);
           if (res.data.success) {
-            this.$router.push("/community");
+            this.$router.push("/");
+            this.getProfile();
           }
         })
         .catch((err) => {

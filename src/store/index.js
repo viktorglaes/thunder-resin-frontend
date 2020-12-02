@@ -5,6 +5,7 @@ import Auth from "./modules/Auth";
 import Characters from "./modules/Characters";
 import Weapons from "./modules/Weapons";
 import Guides from "./modules/Guides";
+import Comments from "./modules/Comments";
 
 Vue.use(Vuex);
 
@@ -18,5 +19,6 @@ export default new Vuex.Store({
     Characters,
     Weapons,
     Guides,
+    Comments,
   },
 });

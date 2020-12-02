@@ -53,10 +53,12 @@
               <div class="container-right">
                 <v-card-title>{{ guide.title }}</v-card-title>
                 <v-card-subtitle>Posted by: {{ guide.author }}</v-card-subtitle>
-                <v-card-text v-if="guide.text.length > 450"
-                  >{{ guide.text.substring(0, 450) }}...</v-card-text
+                <v-card-text v-if="guide.text.length > 450">
+                  <pre> {{ guide.text.substring(0, 450) }}...</pre></v-card-text
                 >
-                <v-card-text v-else>{{ guide.text }}</v-card-text>
+                <v-card-text v-else>
+                  <pre> {{ guide.text }}</pre></v-card-text
+                >
               </div>
             </div>
           </v-card>
@@ -152,6 +154,17 @@ export default {
         display: flex;
         align-items: center;
         justify-content: center;
+      }
+
+      pre {
+        font-size: 14px;
+        font-family: Arial, Helvetica, sans-serif;
+        overflow-x: auto;
+        white-space: pre-wrap;
+        white-space: -moz-pre-wrap;
+        white-space: -pre-wrap;
+        white-space: -o-pre-wrap;
+        word-wrap: break-word;
       }
     }
   }

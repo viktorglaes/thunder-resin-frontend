@@ -14,10 +14,23 @@
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
 
+import { mapActions, mapGetters } from "vuex";
+
 export default {
   components: {
     NavBar,
     Footer,
+  },
+  computed: {
+    ...mapGetters(["isLoggedIn"]),
+  },
+  methods: {
+    ...mapActions(["getProfile"]),
+  },
+  mounted() {
+    if (this.isLoggedIn) {
+      this.getProfile();
+    }
   },
 };
 </script>

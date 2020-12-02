@@ -20,7 +20,6 @@ const actions = {
     return res;
   },
   async submitPost({ commit }, data) {
-    console.log("i got here", data);
     try {
       commit("post_request");
       let res = await axios.post(
@@ -34,6 +33,14 @@ const actions = {
     } catch (err) {
       commit("post_error", err);
     }
+  },
+  async updatePost({ commit }, data) {
+    let res = await axios.put(
+      `http://localhost:5000/api/posts/${data.id}`,
+      data
+    );
+    // commit("viewPost", data);
+    return res;
   },
 };
 
