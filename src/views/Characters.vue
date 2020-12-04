@@ -11,10 +11,10 @@
         <v-col
           md="3"
           v-for="character in allCharacters"
-          :key="character.id"
+          :key="character._id"
           style="col"
         >
-          <v-card dark tile flat class="card">
+          <v-card dark tile flat class="card" @click="navigateTo(character)">
             <div class="img">
               <img
                 :src="character.img"
@@ -95,7 +95,11 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["getAllCharacters"]),
+    ...mapActions(["getAllCharacters", "getCharacter"]),
+    navigateTo(character) {
+      this.getCharacter(character);
+      this.$router.push(`/characters/${character._id}`);
+    },
   },
   mounted() {
     this.getAllCharacters();

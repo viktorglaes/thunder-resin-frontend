@@ -65,6 +65,16 @@ const routes = [
     name: "Guide",
     component: () => import("../views/ViewGuide.vue"),
   },
+  {
+    path: "/weapons/:weaponId",
+    name: "Weapon",
+    component: () => import("../views/ViewWeapon.vue"),
+  },
+  {
+    path: "/characters/:characterId",
+    name: "Character",
+    component: () => import("../views/ViewCharacter.vue"),
+  },
 ];
 
 const router = new VueRouter({

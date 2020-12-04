@@ -6,6 +6,7 @@ import Characters from "./modules/Characters";
 import Weapons from "./modules/Weapons";
 import Guides from "./modules/Guides";
 import Comments from "./modules/Comments";
+import createPersistedState from "vuex-persistedstate";
 
 Vue.use(Vuex);
 
@@ -21,4 +22,5 @@ export default new Vuex.Store({
     Guides,
     Comments,
   },
+  plugins: [createPersistedState()],
 });

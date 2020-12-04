@@ -12,6 +12,7 @@ const getters = {
 
 const actions = {
   getCharacter({ commit }, data) {
+    //re-write to accept only id instead of full a object
     commit("viewCharacter", data);
   },
   async getAllCharacters({ commit }, data) {

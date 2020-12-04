@@ -1,5 +1,5 @@
 <template>
-  <div class="viewpost-view">
+  <div class="viewguide-view">
     <v-icon
       size="42"
       color="primary"
@@ -43,33 +43,53 @@
             {{ currentGuide.character.weapon }}</v-card-subtitle
           >
           <div class="card-buttons">
-            <v-btn class="mx-2" fab dark small color="green" @click="voteUp">
+            <v-btn
+              class="mx-2"
+              :disabled="oldVote === 1"
+              fab
+              :dark="oldVote === 0 || oldVote == null"
+              small
+              color="green"
+              @click="voteUp"
+            >
               <v-icon>
                 mdi-thumb-up
               </v-icon>
             </v-btn>
 
-            <v-btn class="mx-2" fab dark small color="red" @click="voteDown">
+            <v-btn
+              class="mx-2"
+              :disabled="oldVote === 0"
+              fab
+              :dark="oldVote === 1 || oldVote == null"
+              small
+              color="red"
+              @click="voteDown"
+            >
               <v-icon>
                 mdi-thumb-down
               </v-icon>
             </v-btn>
             <div style="display: flex">
-              <div style="color: green; position: absolute; left: 18px">
+              <div style="color: green; margin: auto">
                 {{ upVotes }}
               </div>
-              <div style="color: #b90e0e; position: absolute; right: 23px">
+              <div style="color: #b90e0e; margin: auto">
                 {{ downVotes }}
               </div>
             </div>
           </div>
+          <!-- <v-card dark style="margin-top: 20px;">
+            
+          </v-card> -->
+          <v-card-text>Written By: {{ currentGuide.author }}</v-card-text>
         </v-card>
       </div>
 
       <div class="guide-card">
         <v-card
           elevation="2"
-          style="z-index: 1; min-height: 521px; margin-right: 10px;"
+          style="z-index: 1; min-height: 576px; margin-right: 10px;"
           dark
         >
           <v-card-title>{{ currentGuide.title }} </v-card-title>
@@ -117,9 +137,9 @@
     </div>
     <v-text-field label="Regular"></v-text-field> -->
 
-    <v-card dark style="margin-top: 20px;">
+    <!-- <v-card dark style="margin-top: 20px;">
       <v-card-text>Written By: {{ currentGuide.author }}</v-card-text>
-    </v-card>
+    </v-card> -->
 
     <!-- consider moving cards closer to 5px or less -->
 
@@ -137,7 +157,7 @@
       </div>
     </div>
     <div v-else class="comment">
-      <p style="margin: 20px 0 0 5px;">
+      <p style="margin: 20px 0 0 10px;">
         Please <router-link to="/login">sign in</router-link> to comment.
       </p>
     </div>
@@ -169,20 +189,31 @@ export default {
   computed: {
     ...mapGetters(["currentGuide", "user", "allComments", "isLoggedIn"]),
     upVotes() {
-      let len = this.currentGuide.votes.filter((vote) => vote.type === 1)
-        .length;
-      if (len === undefined) {
-        return 0;
-      }
       return this.currentGuide.votes.filter((vote) => vote.type === 1).length;
     },
     downVotes() {
-      let len = this.currentGuide.votes.filter((vote) => vote.type === 0)
-        .length;
-      if (len === undefined) {
-        return 0;
-      }
       return this.currentGuide.votes.filter((vote) => vote.type === 0).length;
+    },
+    haveVoted() {
+      let res = this.currentGuide.votes.find(
+        (vote) => vote.userId === this.user._id
+      );
+      if (res) {
+        return true;
+      }
+      return false;
+    },
+    oldVote() {
+      let res = this.currentGuide.votes.find((vote) => vote.type !== null);
+      if (res) {
+        if (res.type === 1) {
+          return 1;
+        } else {
+          return 0;
+        }
+      } else {
+        return null;
+      }
     },
   },
   data() {
@@ -205,12 +236,15 @@ export default {
       this.$router.push("/guides");
     },
     voteUp() {
-      let vote = {
-        userId: this.user._id,
-        type: 1,
-      };
-
-      this.currentGuide.votes.push(vote);
+      if (this.haveVoted === true) {
+        let prevVote = this.currentGuide.votes.find((vote) => (vote.type = 1));
+      } else {
+        let newVote = {
+          userId: this.user._id,
+          type: 1,
+        };
+        this.currentGuide.votes.push(newVote);
+      }
 
       let guide = {
         id: this.currentGuide._id,
@@ -220,12 +254,15 @@ export default {
       this.updateGuide(guide);
     },
     voteDown() {
-      let vote = {
-        userId: this.user._id,
-        type: 0,
-      };
-
-      this.currentGuide.votes.push(vote);
+      if (this.haveVoted === true) {
+        let prevVote = this.currentGuide.votes.find((vote) => (vote.type = 0));
+      } else {
+        let newVote = {
+          userId: this.user._id,
+          type: 0,
+        };
+        this.currentGuide.votes.push(newVote);
+      }
 
       let guide = {
         id: this.currentGuide._id,
@@ -262,7 +299,7 @@ export default {
 </script>
 
 <style lang="scss">
-.viewpost-view {
+.viewguide-view {
   padding: 20px;
 
   .comments {
