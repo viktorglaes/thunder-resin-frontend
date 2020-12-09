@@ -9,7 +9,7 @@
     <v-container>
       <v-row no-gutters style="margin-top: 30px">
         <v-col md="3" v-for="weapon in allWeapons" :key="weapon.id" style="col">
-          <v-card dark tile flat class="card">
+          <v-card dark tile flat class="card" @click="navigateTo(weapon)">
             <div class="img">
               <img
                 :src="weapon.img"
@@ -52,7 +52,11 @@ export default {
     return {};
   },
   methods: {
-    ...mapActions(["getAllWeapons"]),
+    ...mapActions(["getAllWeapons", "getWeapon"]),
+    navigateTo(weapon) {
+      this.getWeapon(weapon);
+      this.$router.push(`/weapons/${weapon._id}`);
+    },
   },
   mounted() {
     this.getAllWeapons();

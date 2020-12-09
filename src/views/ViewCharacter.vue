@@ -1,6 +1,14 @@
 <template>
   <div class="viewcharacter-view">
-    <div style="display: flex; z-index: 1;">
+    <v-icon
+      size="42"
+      color="primary"
+      style="position: absolute; z-index: 2; left: 2px; top: 3px; cursor: pointer;"
+      @click="navigateBack"
+    >
+      mdi-chevron-left-circle
+    </v-icon>
+    <div style="display: flex;">
       <div>
         <v-img
           :src="currentCharacter.img"
@@ -10,8 +18,60 @@
           min-width="650"
           style="z-index: 1;"
         ></v-img>
-        <!-- <v-card dark style="border-radius: 0px;">
-          <v-card-title
+      </div>
+
+      <v-container fluid class="pa-0 ma-0 container-right">
+        <div class="overview">
+          <v-card>
+            <div class="card-inner-block">
+              <h3>Overview</h3>
+              <div>Type: {{ currentCharacter.type }}</div>
+              <div>Weapon: {{ currentCharacter.weapon }}</div>
+              <div>
+                Ascension Material:
+                {{ currentCharacter.ascensions[1].mat_1.name }},
+                {{ currentCharacter.ascensions[1].mat_2.name }},
+                {{ currentCharacter.ascensions[0].specialty.name }},
+                {{ currentCharacter.ascensions[0].common.name }}
+              </div>
+            </div>
+          </v-card>
+
+          <v-card>
+            <div class="card-inner-block">
+              <h3>Base Stats</h3>
+              <div>Base HP: {{ baseStats.hp.substring(0, 3) }}</div>
+              <div>Base ATK: {{ baseStats.atk.substring(0, 2) }}</div>
+              <div>Base DEF: {{ baseStats.def.substring(0, 2) }}</div>
+              <div style="text-transform: capitalize;">
+                Secondary Stat: {{ currentCharacter.stats[0].sp }}
+              </div>
+            </div>
+          </v-card>
+          <v-card>
+            <div class="card-inner-block">
+              <h3>Talent Level-Up Materials</h3>
+              <v-row>
+                <v-col
+                  v-for="talentMaterial in currentCharacter.talent_materials"
+                  :key="talentMaterial.name"
+                  style="margin-left: 20px;"
+                >
+                  <v-avatar size="25" style="margin: auto;">
+                    <img :src="talentMaterial.img" alt="#" />
+                  </v-avatar>
+                  {{ talentMaterial.name }}
+                </v-col>
+              </v-row>
+            </div>
+          </v-card>
+        </div>
+      </v-container>
+    </div>
+    <template>
+      <v-toolbar flat dark style="border-radius: 0px;">
+        <v-toolbar-title
+          ><v-card-title
             >{{ currentCharacter.name }}
             <div class="layer">
               <div style="margin: 0 0 5px 10px;">
@@ -26,272 +86,234 @@
               </div>
             </div>
           </v-card-title>
-          <v-card-subtitle
-            >{{ currentCharacter.type }} -
-            {{ currentCharacter.weapon }}
-          </v-card-subtitle>
+        </v-toolbar-title>
+      </v-toolbar>
+      <v-card flat min-height="500">
+        <v-tabs vertical>
+          <v-tab class="tab-content-left">
+            <v-icon left>
+              mdi-poll
+            </v-icon>
+            Stats
+          </v-tab>
+          <v-tab class="tab-content-left">
+            <v-icon left>
+              mdi-dumbbell
+            </v-icon>
+            Talents
+          </v-tab>
+          <v-tab class="tab-content-left">
+            <v-icon left>
+              mdi-account-star
+            </v-icon>
+            Ascensions
+          </v-tab>
+          <v-tab class="tab-content-left">
+            <v-icon left>
+              mdi-graphql
+            </v-icon>
+            Constellations
+          </v-tab>
+          <v-tab class="tab-content-left">
+            <v-icon left>
+              mdi-looks
+            </v-icon>
+            Story Arc
+          </v-tab>
 
-          we need talent level mats, char ascension mats, talents,
-          constellations
-        </v-card> -->
-      </div>
-
-      <v-container fluid class="pa-0 ma-0 container-right">
-        <template>
-          <v-card min-height="500">
-            <v-toolbar color="blue" flat dark style="border-radius: 0px;">
-              <v-toolbar-title
-                ><v-card-title
-                  >{{ currentCharacter.name }}
-                  <div class="layer">
-                    <div style="margin: 0 0 5px 10px;">
-                      <!-- Rarity: {{ character.rarity }} -->
-                      <v-icon
-                        v-for="n in currentCharacter.rarity"
-                        :key="n"
-                        right
-                        color="yellow"
-                      >
-                        mdi-star
-                      </v-icon>
-                    </div>
-                  </div>
-                </v-card-title>
-                <v-card-subtitle style="color: white"
-                  >{{ currentCharacter.type }} -
-                  {{ currentCharacter.weapon }}
-                </v-card-subtitle>
-              </v-toolbar-title>
-            </v-toolbar>
-            <v-tabs vertical>
-              <v-tab class="tab-content-left">
-                <v-icon left>
-                  mdi-access-point
-                </v-icon>
-                Base Stats
-              </v-tab>
-              <v-tab class="tab-content-left">
-                <v-icon left>
-                  mdi-account
-                </v-icon>
-                Talents
-              </v-tab>
-              <v-tab class="tab-content-left">
-                <v-icon left>
-                  mdi-lock
-                </v-icon>
-                Ascensions
-              </v-tab>
-              <v-tab class="tab-content-left">
-                <v-icon left>
-                  mdi-access-point
-                </v-icon>
-                Constellations
-              </v-tab>
-              <v-tab class="tab-content-left">
-                <v-icon left>
-                  mdi-access-point
-                </v-icon>
-                Story Arc
-              </v-tab>
-
-              <v-tab-item>
-                <v-card flat>
-                  <v-card-text>
-                    <template>
-                      <v-simple-table>
-                        <template v-slot:default>
-                          <thead>
-                            <tr>
-                              <th class="text-left">
-                                Level
-                              </th>
-                              <th class="text-left">
-                                HP
-                              </th>
-                              <th class="text-left">
-                                ATK
-                              </th>
-                              <th class="text-left">
-                                DEF
-                              </th>
-                              <th
-                                class="text-left"
-                                style="text-transform: uppercase;"
-                              >
-                                {{ currentCharacter.stats[0].sp }}
-                              </th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr
-                              v-for="stat in currentCharacter.stats"
-                              :key="stat.name"
-                            >
-                              <td>{{ stat.level }}</td>
-                              <td>{{ stat.hp }}</td>
-                              <td>{{ stat.atk }}</td>
-                              <td>{{ stat.def }}</td>
-                              <td>{{ stat.sp_stat }}%</td>
-                            </tr>
-                          </tbody>
-                        </template>
-                      </v-simple-table>
-                    </template>
-                  </v-card-text>
-                </v-card>
-              </v-tab-item>
-              <v-tab-item>
-                <v-card flat>
-                  <v-card-text>
-                    <div
-                      v-for="talent in currentCharacter.talents"
-                      :key="talent.name"
-                    >
-                      <div style="">
-                        <div style="display: flex">
-                          <div>
-                            <img
-                              :src="talent.img"
-                              alt=""
-                              style="background-color: grey; width: 100px;"
-                            />
-                          </div>
-                          <div
-                            style="margin-top: auto; margin-bottom: auto; padding: 10px"
+          <v-tab-item>
+            <v-card flat>
+              <v-card-text>
+                <template>
+                  <v-simple-table>
+                    <template v-slot:default>
+                      <thead>
+                        <tr>
+                          <th class="text-left">
+                            Level
+                          </th>
+                          <th class="text-left">
+                            HP
+                          </th>
+                          <th class="text-left">
+                            ATK
+                          </th>
+                          <th class="text-left">
+                            DEF
+                          </th>
+                          <th
+                            class="text-left"
+                            style="text-transform: uppercase;"
                           >
-                            {{ talent.text }}
-                          </div>
-                        </div>
-                        <div style="margin-bottom: 20px; font-weight: 600">
+                            {{ currentCharacter.stats[0].sp }}
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr
+                          v-for="stat in currentCharacter.stats"
+                          :key="stat.name"
+                        >
+                          <td>{{ stat.level }}</td>
+                          <td>{{ stat.hp }}</td>
+                          <td>{{ stat.atk }}</td>
+                          <td>{{ stat.def }}</td>
+                          <td>{{ stat.sp_stat }}%</td>
+                        </tr>
+                      </tbody>
+                    </template>
+                  </v-simple-table>
+                </template>
+              </v-card-text>
+            </v-card>
+          </v-tab-item>
+          <v-tab-item>
+            <v-card flat>
+              <v-card-text>
+                <v-row>
+                  <v-col
+                    v-for="talent in currentCharacter.talents"
+                    :key="talent.name"
+                    md="6"
+                  >
+                    <div class="column">
+                      <div>
+                        <img :src="talent.img" alt="" class="column-img" />
+                      </div>
+                      <div>
+                        <div class="column-title" style="">
                           {{ talent.name }}
                         </div>
+                        <div class="column-text">
+                          {{ talent.text }}
+                        </div>
                       </div>
                     </div>
-                  </v-card-text>
-                </v-card>
-              </v-tab-item>
-              <v-tab-item>
-                <v-card flat>
-                  <v-card-text>
-                    <template>
-                      <v-simple-table>
-                        <template v-slot:default>
-                          <thead>
-                            <tr>
-                              <th class="text-left">
-                                Ascension
-                              </th>
-                              <th class="text-left">
-                                Level
-                              </th>
-                              <th class="text-left">
-                                Mora
-                              </th>
-                              <th class="text-left">
-                                Material 1
-                              </th>
-                              <th class="text-left">
-                                Material 2
-                              </th>
-                              <th class="text-left">
-                                Specialty
-                              </th>
-                              <th class="text-left">
-                                Common
-                              </th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr
-                              v-for="ascension in currentCharacter.ascensions"
-                              :key="ascension.order"
-                            >
-                              <td>{{ ascension.order }}</td>
-                              <td>{{ ascension.req_level }}</td>
-                              <td>{{ ascension.mora }}</td>
-                              <td>
-                                <img
-                                  :src="ascension.mat_1.img"
-                                  alt=""
-                                  style="margin-left: auto; margin-right: auto"
-                                />
-                                <div>
-                                  {{ ascension.mat_1.name }}
-                                  {{ ascension.quantity_1 }}x
-                                </div>
-                              </td>
-                              <td>
-                                <img :src="ascension.mat_2.img" alt="" />
-                                <div>
-                                  {{ ascension.mat_2.name }}
-                                  {{ ascension.quantity_2 }}x
-                                </div>
-                              </td>
-                              <td>
-                                <img :src="ascension.specialty.img" alt="" />
-                                <div>
-                                  {{ ascension.specialty.name }}
-                                  {{ ascension.quantity_specialty }}x
-                                </div>
-                              </td>
-                              <td>
-                                <img :src="ascension.common.img" alt="" />
-                                <div>
-                                  {{ ascension.common.name }}
-                                  {{ ascension.quantity_common }}x
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </template>
-                      </v-simple-table>
-                    </template>
-                  </v-card-text>
-                </v-card>
-              </v-tab-item>
-              <v-tab-item>
-                <v-card flat>
-                  <v-card-text>
-                    <div
-                      v-for="constellation in currentCharacter.constellations"
-                      :key="constellation.name"
-                    >
-                      <div style="">
-                        <div style="display: flex">
-                          <div>
+                  </v-col>
+                </v-row>
+              </v-card-text>
+            </v-card>
+          </v-tab-item>
+          <v-tab-item>
+            <v-card flat>
+              <v-card-text>
+                <template>
+                  <v-simple-table>
+                    <template v-slot:default>
+                      <thead>
+                        <tr>
+                          <th class="text-left">
+                            Ascension
+                          </th>
+                          <th class="text-left">
+                            Level
+                          </th>
+                          <th class="text-left">
+                            Mora
+                          </th>
+                          <th class="text-left">
+                            Material 1
+                          </th>
+                          <th class="text-left">
+                            Material 2
+                          </th>
+                          <th class="text-left">
+                            Specialty
+                          </th>
+                          <th class="text-left">
+                            Common
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr
+                          v-for="ascension in currentCharacter.ascensions"
+                          :key="ascension.order"
+                        >
+                          <td>{{ ascension.order }}</td>
+                          <td>{{ ascension.req_level }}</td>
+                          <td>{{ ascension.mora }}</td>
+                          <td>
                             <img
-                              :src="constellation.img"
+                              :src="ascension.mat_1.img"
                               alt=""
-                              style="background-color: grey; width: 100px;"
+                              style="margin-left: auto; margin-right: auto"
                             />
-                          </div>
-                          <div
-                            style="margin-top: auto; margin-bottom: auto; padding: 10px"
-                          >
-                            {{ constellation.text }}
-                          </div>
-                        </div>
-                        <div style="margin-bottom: 20px; font-weight: 600">
+                            <div>
+                              {{ ascension.mat_1.name }}
+                              {{ ascension.quantity_1 }}x
+                            </div>
+                          </td>
+                          <td>
+                            <img :src="ascension.mat_2.img" alt="" />
+                            <div>
+                              {{ ascension.mat_2.name }}
+                              {{ ascension.quantity_2 }}x
+                            </div>
+                          </td>
+                          <td>
+                            <img :src="ascension.specialty.img" alt="" />
+                            <div>
+                              {{ ascension.specialty.name }}
+                              {{ ascension.quantity_specialty }}x
+                            </div>
+                          </td>
+                          <td>
+                            <img :src="ascension.common.img" alt="" />
+                            <div>
+                              {{ ascension.common.name }}
+                              {{ ascension.quantity_common }}x
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </template>
+                  </v-simple-table>
+                </template>
+              </v-card-text>
+            </v-card>
+          </v-tab-item>
+          <v-tab-item>
+            <v-card flat>
+              <v-card-text>
+                <v-row>
+                  <v-col
+                    v-for="constellation in currentCharacter.constellations"
+                    :key="constellation.name"
+                    md="6"
+                  >
+                    <div class="column">
+                      <div>
+                        <img
+                          :src="constellation.img"
+                          alt=""
+                          class="column-img"
+                        />
+                      </div>
+                      <div>
+                        <div class="column-title">
                           {{ constellation.name }}
                         </div>
+                        <div class="column-text">
+                          {{ constellation.text }}
+                        </div>
                       </div>
                     </div>
-                  </v-card-text>
-                </v-card>
-              </v-tab-item>
-              <v-tab-item>
-                <v-card flat>
-                  <v-card-text>
-                    Story
-                  </v-card-text>
-                </v-card>
-              </v-tab-item>
-            </v-tabs>
-          </v-card>
-        </template>
-      </v-container>
-    </div>
+                  </v-col>
+                </v-row>
+              </v-card-text>
+            </v-card>
+          </v-tab-item>
+          <v-tab-item>
+            <v-card flat>
+              <v-card-text>
+                Story
+              </v-card-text>
+            </v-card>
+          </v-tab-item>
+        </v-tabs>
+      </v-card>
+    </template>
   </div>
 </template>
 
@@ -302,25 +324,74 @@ export default {
   name: "ViewCharacter",
   computed: {
     ...mapGetters(["currentCharacter"]),
+    baseStats() {
+      return this.currentCharacter.stats[0];
+    },
+    // baseAtk() {
+    //   console.log("atk");
+    // },
+    // baseDef() {
+    //   console.log("def");
+    // },
   },
   methods: {
     ...mapActions([]),
+    navigateBack() {
+      this.$router.push("/characters");
+    },
   },
 };
 </script>
 
 <style lang="scss">
 .viewcharacter-view {
-  margin-bottom: 20px;
+  // margin-bottom: 20px;
   /* color: #1e1e1e63 */
 
   .container-right {
-    border-left: 1px solid #1e1e1e;
-    background-color: #1e1e1e17;
+    border-left: 1px solid #f0f0f0;
+    // background-color: #1e1e1e17;
+
+    .card-inner-block {
+      padding: 15px;
+
+      div {
+        font-size: 14px;
+      }
+    }
   }
 
   .tab-content-left {
     justify-content: left;
+  }
+
+  .overview {
+    padding: 20px;
+    border-top: 1px solid rgb(189, 189, 189);
+  }
+
+  .overview > *:not(:last-child) {
+    display: block;
+    margin-bottom: 10px;
+  }
+  .column {
+    display: flex;
+    .column-title {
+      font-weight: 600;
+      padding-left: 10px;
+    }
+
+    .column-text {
+      margin-top: auto;
+      margin-bottom: auto;
+      padding: 10px;
+    }
+
+    .column-img {
+      background-color: grey;
+      width: 100px;
+      border-radius: 50%;
+    }
   }
 }
 </style>

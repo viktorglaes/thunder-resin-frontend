@@ -24,6 +24,7 @@
             solo
             @click:append="show3 = !show3"
             v-model="password"
+            @keydown.enter="loginUser()"
           ></v-text-field>
           <div class="button-container">
             <div>
@@ -65,7 +66,6 @@ export default {
 
       this.login(user)
         .then((res) => {
-          console.log(user, res);
           if (res.data.success) {
             this.$router.push("/");
             this.getProfile();

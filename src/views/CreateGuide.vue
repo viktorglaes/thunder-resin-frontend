@@ -179,8 +179,11 @@ export default {
 
   .form {
     margin: auto;
+    margin-top: 20px;
     width: 1000px;
     padding: 20px;
+    border: 1px solid rgb(110, 110, 110);
+    border-radius: 5px;
 
     .title {
       text-align: left;

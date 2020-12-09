@@ -45,12 +45,13 @@
           <div class="card-buttons">
             <v-btn
               class="mx-2"
-              :disabled="oldVote === 1"
+              :disabled="oldVote === 1 || oldVote === 3"
               fab
-              :dark="oldVote === 0 || oldVote == null"
+              :dark="oldVote === 0 || oldVote === 2"
               small
               color="green"
-              @click="voteUp"
+              value="1"
+              @click="vote($event)"
             >
               <v-icon>
                 mdi-thumb-up
@@ -59,12 +60,13 @@
 
             <v-btn
               class="mx-2"
-              :disabled="oldVote === 0"
+              :disabled="oldVote === 0 || oldVote === 3"
               fab
-              :dark="oldVote === 1 || oldVote == null"
+              :dark="oldVote === 1 || oldVote === 2"
               small
               color="red"
-              @click="voteDown"
+              value="0"
+              @click="vote($event)"
             >
               <v-icon>
                 mdi-thumb-down
@@ -102,6 +104,7 @@
                 v-for="weapon in currentGuide.recommendedWeapons"
                 :key="weapon._id"
                 style="margin-left: 20px;"
+                md="1"
               >
                 <v-avatar size="80" style="margin: auto;">
                   <img :src="weapon.img" alt="#" />
@@ -114,13 +117,14 @@
             <v-card-title>Talent Priority</v-card-title>
             <v-row>
               <v-col
-                v-for="weapon in currentGuide.recommendedWeapons"
-                :key="weapon._id"
+                v-for="(talent, index) in currentGuide.talentOrder"
+                :key="talent"
                 style="margin-left: 20px;"
               >
-                <v-avatar size="80" style="margin: auto;">
+                <div>{{ index + 1 }} - {{ talent }}</div>
+                <!-- <v-avatar size="80" style="margin: auto;">
                   <img :src="weapon.img" alt="#" />
-                </v-avatar>
+                </v-avatar> -->
               </v-col>
             </v-row>
           </div>
@@ -148,6 +152,7 @@
         style="margin-left: 5px; margin-top: 20px;"
         placeholder="Comment..."
         v-model="text"
+        @keydown.enter="submitComment"
       ></v-text-field>
       <div class="comment-buttons">
         <v-btn style="margin-right: 5px" text @click="cancelComment"
@@ -171,9 +176,10 @@
                 <v-list-item-subtitle>{{
                   comment.author
                 }}</v-list-item-subtitle>
-                <p>{{ comment.text }}</p>
+                <p style="font-size: 14px">{{ comment.text }}</p>
               </v-list-item-content>
             </v-list-item>
+            <v-divider style="margin: 0 14px 0 14px"></v-divider>
           </div>
         </v-card>
       </template>
@@ -204,15 +210,18 @@ export default {
       return false;
     },
     oldVote() {
-      let res = this.currentGuide.votes.find((vote) => vote.type !== null);
-      if (res) {
-        if (res.type === 1) {
-          return 1;
+      if (this.isLoggedIn) {
+        let res = this.haveVoted;
+        if (res) {
+          let thisVote = this.currentGuide.votes.find(
+            (vote) => vote.type !== null && vote.userId == this.user._id
+          );
+          return thisVote.type;
         } else {
-          return 0;
+          return 2; // NOT VOTED YET
         }
       } else {
-        return null;
+        return 3; // NOT LOGGED IN
       }
     },
   },
@@ -235,41 +244,33 @@ export default {
     navigateBack() {
       this.$router.push("/guides");
     },
-    voteUp() {
-      if (this.haveVoted === true) {
-        let prevVote = this.currentGuide.votes.find((vote) => (vote.type = 1));
-      } else {
-        let newVote = {
-          userId: this.user._id,
-          type: 1,
+    vote(e) {
+      let voteValue = parseInt(e.currentTarget.value);
+
+      if (this.isLoggedIn) {
+        if (this.haveVoted === true) {
+          this.currentGuide.votes.find((vote) => {
+            if (vote.userId === this.user._id) {
+              vote.type = voteValue;
+            }
+          });
+        } else {
+          let newVote = {
+            userId: this.user._id,
+            type: voteValue,
+          };
+          this.currentGuide.votes.push(newVote);
+        }
+
+        let guide = {
+          id: this.currentGuide._id,
+          votes: this.currentGuide.votes,
         };
-        this.currentGuide.votes.push(newVote);
-      }
-
-      let guide = {
-        id: this.currentGuide._id,
-        votes: this.currentGuide.votes,
-      };
-
-      this.updateGuide(guide);
-    },
-    voteDown() {
-      if (this.haveVoted === true) {
-        let prevVote = this.currentGuide.votes.find((vote) => (vote.type = 0));
+        //maybe write async function to change record in db then reload
+        this.updateGuide(guide);
       } else {
-        let newVote = {
-          userId: this.user._id,
-          type: 0,
-        };
-        this.currentGuide.votes.push(newVote);
+        return;
       }
-
-      let guide = {
-        id: this.currentGuide._id,
-        votes: this.currentGuide.votes,
-      };
-
-      this.updateGuide(guide);
     },
     cancelComment() {
       this.text = null;

@@ -5,13 +5,13 @@
         <div class="background-title">About</div>
         <p class="paragraph-first">
           This platform is for the Genshin Impact community and its followers.
-          Post your topics of interest and see what the general consensus is in
+          Post your topics of interest and see what the general opinion is in
           the community, share your build of your favorite character, or just
           learn more Genshin Impact.
         </p>
-        <p class="paragraph-second">
+        <!-- <p class="paragraph-second">
           NOTE: We are not in any way associated with Mihoyo.
-        </p>
+        </p> -->
       </div>
     </div>
 
@@ -45,7 +45,7 @@ export default {};
       color: white;
 
       .paragraph-first {
-        font-size: 18px;
+        // font-size: 16px;
       }
 
       .paragraph-second {

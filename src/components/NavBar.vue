@@ -13,11 +13,18 @@
       </v-tabs>
       <div v-if="isLoggedIn" class="nav-buttons">
         <v-btn @click="logoutUser" style="margin-right:20px;">Sign out</v-btn>
-        <v-avatar
-          class="hidden-sm-and-down"
-          color="grey darken-1 shrink"
-          size="32"
-        ></v-avatar>
+        <router-link to="/profile">
+          <v-avatar
+            class="hidden-sm-and-down"
+            color="grey darken-1 shrink"
+            size="32"
+          >
+            <img
+              src="https://genshin-impact-bucket.s3.us-east-2.amazonaws.com/icons/keqing_icon.png"
+              alt="Keqing"
+            />
+          </v-avatar>
+        </router-link>
       </div>
       <div class="nav-buttons" v-else>
         <div style="margin-right: 10px;">
@@ -59,6 +66,7 @@ export default {
       { title: "Guides", icon: "mdi-view-dashboard", to: "/guides" },
       { title: "Characters", icon: "mdi-image", to: "/characters" },
       { title: "Weapons", icon: "mdi-image", to: "/weapons" },
+      { title: "Farming", icon: "mdi-help-box", to: "/farming" },
       { title: "About", icon: "mdi-help-box", to: "/about" },
     ],
   }),

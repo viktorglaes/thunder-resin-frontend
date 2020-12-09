@@ -14,7 +14,7 @@
                 :src="guide.character.img"
                 min-height="300"
                 max-height="300"
-                min-width="523"
+                min-width="518"
                 style="border: 1px solid rgb(200, 200, 200); border-bottom: none; border-top-left-radius: 5px; border-top-right-radius: 5px; z-index: 1;"
               ></v-img>
               <v-card

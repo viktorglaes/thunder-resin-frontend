@@ -28,6 +28,7 @@
             style="margin: 20px 0 0 5px;"
             placeholder="Comment..."
             v-model="text"
+            @keydown.enter="submitComment"
           ></v-text-field>
           <div class="comment-buttons">
             <v-btn style="margin-right: 5px" text @click="cancelComment"
@@ -38,7 +39,8 @@
         </div>
         <div v-else class="comment">
           <p style="margin: 20px 0 0 5px;">
-            Please <router-link to="/login">sign in</router-link> to comment.
+            Please <router-link to="/login">sign in</router-link> to vote and
+            comment.
           </p>
         </div>
 
@@ -78,12 +80,13 @@
             <div>
               <v-btn
                 class="mx-2"
-                :disabled="oldVote === 1 || oldVote == null"
+                :disabled="oldVote === 1 || oldVote === 3"
                 fab
-                :dark="oldVote === 0"
+                :dark="oldVote === 0 || oldVote === 2"
                 small
                 color="green"
-                @click="voteUp"
+                value="1"
+                @click="vote($event)"
               >
                 <v-icon>
                   mdi-thumb-up
@@ -94,12 +97,13 @@
             <div>
               <v-btn
                 class="mx-2"
-                :disabled="oldVote === 0 || oldVote == null"
+                :disabled="oldVote === 0 || oldVote === 3"
                 fab
-                :dark="oldVote === 1"
+                :dark="oldVote === 1 || oldVote === 2"
                 small
                 color="red"
-                @click="voteDown"
+                value="0"
+                @click="vote($event)"
               >
                 <v-icon>
                   mdi-thumb-down
@@ -114,7 +118,7 @@
                 ><span style="color: red" v-else>down</span></b
               >.
             </div>
-            <div class="txt-small-vote" v-else>
+            <div class="txt-small-vote" v-else-if="!isLoggedIn">
               You are not logged in.
             </div>
           </div>
@@ -148,19 +152,17 @@ export default {
     },
     oldVote() {
       if (this.isLoggedIn) {
-        let res = this.currentPost.votes.find((vote) => vote.type !== null);
-        console.log(res);
+        let res = this.haveVoted;
         if (res) {
-          if (res.type === 1) {
-            return 1;
-          } else {
-            return 0;
-          }
+          let thisVote = this.currentPost.votes.find(
+            (vote) => vote.type !== null && vote.userId == this.user._id
+          );
+          return thisVote.type;
         } else {
-          return null;
+          return 2; // NOT VOTED YET
         }
       } else {
-        return null;
+        return 3; // NOT LOGGED IN
       }
     },
   },
@@ -177,14 +179,20 @@ export default {
     navigateBack() {
       this.$router.push("/community");
     },
-    voteUp() {
+    vote(e) {
+      let voteValue = parseInt(e.currentTarget.value);
+
       if (this.isLoggedIn) {
         if (this.haveVoted === true) {
-          let prevVote = this.currentPost.votes.find((vote) => (vote.type = 1));
+          this.currentPost.votes.find((vote) => {
+            if (vote.userId === this.user._id) {
+              vote.type = voteValue;
+            }
+          });
         } else {
           let newVote = {
             userId: this.user._id,
-            type: 1,
+            type: voteValue,
           };
           this.currentPost.votes.push(newVote);
         }
@@ -197,28 +205,6 @@ export default {
         this.updatePost(post);
       } else {
         return;
-      }
-    },
-    voteDown() {
-      if (this.isLoggedIn) {
-        if (this.haveVoted === true) {
-          let prevVote = this.currentPost.votes.find((vote) => (vote.type = 0));
-        } else {
-          let newVote = {
-            userId: this.user._id,
-            type: 0,
-          };
-          this.currentPost.votes.push(newVote);
-        }
-
-        let post = {
-          id: this.currentPost._id,
-          votes: this.currentPost.votes,
-        };
-
-        this.updatePost(post);
-      } else {
-        console.log("you are not logged in");
       }
     },
     cancelComment() {
