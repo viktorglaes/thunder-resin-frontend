@@ -211,10 +211,14 @@ export default {
       this.text = null;
     },
     submitComment() {
-      let branch = {
-        id: this.$route.params.postId,
-        type: this.$route.name.toLowerCase(),
-      };
+      let branch = this.currentPost;
+      // let branch = {
+      //   id: this.$route.params.postId,
+      //   type: this.$route.name.toLowerCase(),
+      // };
+
+      // branch.id = this.$route.params.postId;
+      branch.type = this.$route.name.toLowerCase();
 
       let comment = {
         text: this.text,
@@ -272,6 +276,7 @@ export default {
   }
   .comments {
     margin-top: 20px;
+    max-width: 900px;
   }
 
   pre {

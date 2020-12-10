@@ -5,12 +5,13 @@
         <v-card-text>
           <v-btn
             v-for="icon in icons"
-            :key="icon"
+            :key="icon.icon"
             class="mx-4 white--text"
             icon
+            :href="icon.link"
           >
             <v-icon size="24px">
-              {{ icon }}
+              {{ icon.icon }}
             </v-icon>
           </v-btn>
         </v-card-text>
@@ -19,14 +20,11 @@
           class="white--text pt-0"
           style="height: 200px; padding: 50px 200px 0 200px"
         >
-          Phasellus feugiat arcu sapien, et iaculis ipsum elementum sit amet.
-          Mauris cursus commodo interdum. Praesent ut risus eget metus luctus
-          accumsan id ultrices nunc. Sed at orci sed massa consectetur dignissim
-          a sit amet dui. Duis commodo vitae velit et faucibus. Morbi vehicula
-          lacinia malesuada. Nulla placerat augue vel ipsum ultrices, cursus
-          iaculis dui sollicitudin. Vestibulum eu ipsum vel diam elementum
-          tempor vel ut orci. Orci varius natoque penatibus et magnis dis
-          parturient montes, nascetur ridiculus mus.
+          Work with the Genshin Impact community. Help your fellow players find
+          new tips and tricks for builds, share your opinion on game mechanics
+          or functionality, and most of all, have fun playing this amazing
+          cross-platform Gacha game. If you have anything to share with the dev
+          team, please do not hesitate to reach out via LinkedIn or email.
         </v-card-text>
 
         <v-divider></v-divider>
@@ -43,7 +41,14 @@
 export default {
   name: "Footer",
   data: () => ({
-    icons: ["mdi-earth", "mdi-linkedin", "mdi-github"],
+    icons: [
+      { icon: "mdi-earth", link: "http://www.viktorglaes.com/" },
+      {
+        icon: "mdi-linkedin",
+        link: "https://www.linkedin.com/in/viktor-glaes/",
+      },
+      { icon: "mdi-github", link: "https://github.com/viktorglaes" },
+    ],
   }),
 };
 </script>

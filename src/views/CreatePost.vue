@@ -68,6 +68,7 @@ export default {
       let post = {
         title: this.title,
         text: this.text,
+        userId: this.user._id ? this.user._id : "",
         author: this.author ? this.author : this.user.username,
         votes: [],
       };

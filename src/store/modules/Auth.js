@@ -76,6 +76,14 @@ const actions = {
     router.push("/").catch(() => {});
     return;
   },
+
+  async updateFavoriteChar({ commit }, data) {
+    let res = await axios.put(
+      `http://localhost:5000/api/users/${data._id}`,
+      data
+    );
+    return res;
+  },
 };
 
 const mutations = {

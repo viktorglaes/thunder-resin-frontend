@@ -24,10 +24,14 @@
                 outlined
               >
                 <div class="card-padding">
-                  <div class="home-title">{{ guide.title }}</div>
+                  <!-- <div class="home-title">{{ guide.title }}</div> -->
+                  <div class="home-title" v-if="guide.title.length > 42">
+                    {{ guide.title.substring(0, 42) }}...
+                  </div>
+                  <div class="home-title" v-else>{{ guide.title }}</div>
 
-                  <div class="home-text" v-if="guide.text.length > 100">
-                    {{ post.text.substring(0, 100) }}...
+                  <div class="home-text" v-if="guide.text.length > 120">
+                    {{ guide.text.substring(0, 120) }}...
                   </div>
                   <div class="home-text" v-else>{{ guide.text }}</div>
                   <div class="home-author">Posted by: {{ guide.author }}</div>
@@ -53,7 +57,10 @@
           >
             <v-card class="pa-2 post" tile outlined @click="navigateTo(post)">
               <div class="card-padding">
-                <div class="home-title">{{ post.title }}</div>
+                <div class="home-title" v-if="post.title.length > 42">
+                  {{ post.title.substring(0, 42) }}...
+                </div>
+                <div class="home-title" v-else>{{ post.title }}</div>
 
                 <div class="home-text" v-if="post.text.length > 100">
                   {{ post.text.substring(0, 100) }}...
@@ -134,7 +141,7 @@ export default {
       position: absolute;
       width: 100%;
       top: 250px;
-      height: 600px;
+      height: 590px;
       background: rgba(0, 0, 0, 0.7);
       color: white;
       padding: 25px;
@@ -144,7 +151,7 @@ export default {
       position: absolute;
       width: 100%;
       top: 1000px;
-      height: 300px;
+      height: 290px;
       background: rgba(0, 0, 0, 0.7);
       color: white;
       padding: 25px;
@@ -154,7 +161,7 @@ export default {
       opacity: 100%;
 
       .post {
-        height: 120px;
+        height: 130px;
         background-color: rgb(240, 238, 238);
       }
     }
@@ -166,7 +173,7 @@ export default {
     .btn-view {
       position: absolute;
       right: 10px;
-      bottom: 15px;
+      bottom: 10px;
     }
   }
   .background-title {
@@ -176,7 +183,7 @@ export default {
   }
 
   .home-title {
-    font-size: 24px;
+    font-size: 20px;
     font-weight: 600;
     text-transform: uppercase;
   }

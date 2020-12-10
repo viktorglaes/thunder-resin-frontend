@@ -48,6 +48,7 @@ const mutations = {
     state.guide = guide;
   },
   setGuides(state, guides) {
+    guides.reverse();
     state.guides = guides;
   },
   guide_request(state) {

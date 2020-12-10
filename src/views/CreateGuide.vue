@@ -149,6 +149,7 @@ export default {
         author: this.author ? this.author : this.user.username,
         character: this.character,
         playstyle: this.playstyle,
+        userId: this.user._id ? this.user._id : "",
         recommendedWeapons: this.recommendedWeapons,
         talentOrder: this.talentOrder,
         votes: [],

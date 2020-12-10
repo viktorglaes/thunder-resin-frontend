@@ -49,6 +49,7 @@ const mutations = {
     state.post = post;
   },
   setPosts(state, posts) {
+    posts.reverse();
     state.posts = posts;
   },
   post_request(state) {

@@ -8,121 +8,119 @@
     >
       mdi-chevron-left-circle
     </v-icon>
-    <v-card elevation="4" style="padding: 25px;">
-      <v-row style="min-height: 300px">
-        <v-col md="2" style="margin: auto">
-          <div style="padding: 0 0 0 65px; ">
-            <v-img
-              :src="currentWeapon.img"
-              max-height="150"
-              min-height="150"
-              max-width="150"
-              min-width="150"
-              style="z-index: 1; "
-            ></v-img>
-          </div>
-        </v-col>
-        <v-divider vertical></v-divider>
-        <v-col md="3">
-          <v-container fluid class="pa-0 ma-0 container-right">
-            <div class="overview">
-              <v-card elevation="0">
-                <div class="card-inner-block">
-                  <h3 style="margin-bottom: 5px;">Overview</h3>
-                  <div class="flex-box">
-                    <div class="box-left">
-                      <div>Type:</div>
-                      <div>Base ATK:</div>
-                      <div>Secondary:</div>
-                      <div>Passive:</div>
-                      <div>Bonus:</div>
-                    </div>
-
-                    <div class="box-right">
-                      <div>{{ currentWeapon.type }}</div>
-                      <div>{{ currentWeapon.atk }}</div>
-                      <div>{{ currentWeapon.secondary }}</div>
-                      <div>{{ currentWeapon.passive }}</div>
-                      <div>{{ currentWeapon.bonus }}</div>
-                    </div>
-                  </div>
-                </div>
-              </v-card>
-            </div>
-          </v-container>
-        </v-col>
-        <v-divider vertical></v-divider>
-        <v-col>
-          <div>
+    <v-row style="min-height: 300px">
+      <v-col md="2" style="margin: auto">
+        <div style="padding: 0 0 0 65px; ">
+          <v-img
+            :src="currentWeapon.img"
+            max-height="150"
+            min-height="150"
+            max-width="150"
+            min-width="150"
+            style="z-index: 1; "
+          ></v-img>
+        </div>
+      </v-col>
+      <v-divider vertical></v-divider>
+      <v-col md="3">
+        <v-container fluid class="pa-0 ma-0 container-right">
+          <div class="overview">
             <v-card elevation="0">
               <div class="card-inner-block">
-                <h3>Ascensions</h3>
-                <template>
-                  <v-simple-table dense>
-                    <template v-slot:default>
-                      <thead>
-                        <tr>
-                          <th class="text-left">
-                            Ascension
-                          </th>
-                          <th class="text-left">
-                            Max Level
-                          </th>
-                          <th class="text-left">
-                            Mora
-                          </th>
-                          <th class="text-left">
-                            Weapon Ascension Material
-                          </th>
-                          <th class="text-left">
-                            Common Material 1
-                          </th>
-                          <th class="text-left">
-                            Common Material 2
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr
-                          v-for="ascension in currentWeapon.ascensions"
-                          :key="ascension.name"
-                        >
-                          <td>{{ ascension.order }}</td>
-                          <td>{{ ascension.max_level }}</td>
-                          <td>{{ ascension.mora }}</td>
-                          <td>
-                            <img :src="ascension.weapon_mat.img" alt="" />{{
-                              ascension.weapon_mat.name
-                            }}
-                            {{ ascension.quantity_weapon_mat }}x
-                          </td>
-                          <td>
-                            <img :src="ascension.common_1_mat.img" alt="" />{{
-                              ascension.common_1_mat.name
-                            }}
-                            {{ ascension.quantity_common_1 }}x
-                          </td>
-                          <td>
-                            <img :src="ascension.common_2_mat.img" alt="" />{{
-                              ascension.common_2_mat.name
-                            }}
-                            {{ ascension.quantity_common_2 }}x
-                          </td>
-                        </tr>
-                      </tbody>
-                    </template>
-                  </v-simple-table>
-                </template>
+                <h3 style="margin-bottom: 5px;">Overview</h3>
+                <div class="flex-box">
+                  <div class="box-left">
+                    <div>Type:</div>
+                    <div>Base ATK:</div>
+                    <div>Secondary:</div>
+                    <div>Passive:</div>
+                    <div>Bonus:</div>
+                  </div>
+
+                  <div class="box-right">
+                    <div>{{ currentWeapon.type }}</div>
+                    <div>{{ currentWeapon.atk }}</div>
+                    <div>{{ currentWeapon.secondary }}</div>
+                    <div>{{ currentWeapon.passive }}</div>
+                    <div>{{ currentWeapon.bonus }}</div>
+                  </div>
+                </div>
               </div>
             </v-card>
           </div>
-        </v-col>
-      </v-row>
-    </v-card>
+        </v-container>
+      </v-col>
+      <v-divider vertical></v-divider>
+      <v-col>
+        <div>
+          <v-card elevation="0">
+            <div class="card-inner-block">
+              <h3>Ascensions</h3>
+              <template>
+                <v-simple-table dense>
+                  <template v-slot:default>
+                    <thead>
+                      <tr>
+                        <th class="text-left">
+                          Ascension
+                        </th>
+                        <th class="text-left">
+                          Max Level
+                        </th>
+                        <th class="text-left">
+                          Mora
+                        </th>
+                        <th class="text-left">
+                          Weapon Ascension Material
+                        </th>
+                        <th class="text-left">
+                          Common Material 1
+                        </th>
+                        <th class="text-left">
+                          Common Material 2
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr
+                        v-for="ascension in currentWeapon.ascensions"
+                        :key="ascension.name"
+                      >
+                        <td>{{ ascension.order }}</td>
+                        <td>{{ ascension.max_level }}</td>
+                        <td>{{ ascension.mora }}</td>
+                        <td>
+                          <img :src="ascension.weapon_mat.img" alt="" />{{
+                            ascension.weapon_mat.name
+                          }}
+                          {{ ascension.quantity_weapon_mat }}x
+                        </td>
+                        <td>
+                          <img :src="ascension.common_1_mat.img" alt="" />{{
+                            ascension.common_1_mat.name
+                          }}
+                          {{ ascension.quantity_common_1 }}x
+                        </td>
+                        <td>
+                          <img :src="ascension.common_2_mat.img" alt="" />{{
+                            ascension.common_2_mat.name
+                          }}
+                          {{ ascension.quantity_common_2 }}x
+                        </td>
+                      </tr>
+                    </tbody>
+                  </template>
+                </v-simple-table>
+              </template>
+            </div>
+          </v-card>
+        </div>
+      </v-col>
+    </v-row>
     <!-- <div style="display: flex;"> -->
 
     <!-- </div> -->
-    <v-toolbar flat elevation="2" style="border-radius: 0px;">
+    <v-toolbar dark flat elevation="2" style="border-radius: 0px;">
       <v-toolbar-title
         ><v-card-title
           >{{ currentWeapon.name }}
@@ -132,7 +130,7 @@
                 v-for="n in currentWeapon.rarity"
                 :key="n"
                 right
-                color="red"
+                color="yellow"
               >
                 mdi-star
               </v-icon>
@@ -157,12 +155,11 @@
               style="text-align: center"
             >
               <v-card
-                color="dark"
                 class="ma-4"
                 height="250"
                 width="250"
                 @click="navigateTo(weapon)"
-                elevation="2"
+                elevation="1"
               >
                 <v-row class="fill-height" align="center" justify="center">
                   <v-scale-transition>

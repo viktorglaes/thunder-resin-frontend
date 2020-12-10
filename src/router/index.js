@@ -80,6 +80,11 @@ const routes = [
     name: "Profile",
     component: () => import("../views/Profile.vue"),
   },
+  {
+    path: "/farming",
+    name: "Farming",
+    component: () => import("../views/Farming.vue"),
+  },
 ];
 
 const router = new VueRouter({
