@@ -15,17 +15,14 @@ const actions = {
     commit("viewPost", data);
   },
   async getAllPosts({ commit }, data) {
-    let res = await axios.get("http://localhost:5000/api/posts");
+    let res = await axios.get("/api/posts");
     commit("setPosts", res.data);
     return res;
   },
   async submitPost({ commit }, data) {
     try {
       commit("post_request");
-      let res = await axios.post(
-        "http://localhost:5000/api/posts/submit",
-        data
-      );
+      let res = await axios.post("/api/posts/submit", data);
       if (res.data.success !== undefined) {
         commit("post_success");
       }
@@ -35,10 +32,7 @@ const actions = {
     }
   },
   async updatePost({ commit }, data) {
-    let res = await axios.put(
-      `http://localhost:5000/api/posts/${data.id}`,
-      data
-    );
+    let res = await axios.put(`/api/posts/${data.id}`, data);
     // commit("viewPost", data);
     return res;
   },

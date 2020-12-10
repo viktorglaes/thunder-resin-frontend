@@ -15,7 +15,7 @@ const actions = {
     commit("viewWeapon", data);
   },
   async getAllWeapons({ commit }, data) {
-    let res = await axios.get("http://localhost:5000/api/weapons");
+    let res = await axios.get("/api/weapons");
     commit("setWeapons", res.data);
     return res;
   },

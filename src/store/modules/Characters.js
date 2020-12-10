@@ -16,7 +16,7 @@ const actions = {
     commit("viewCharacter", data);
   },
   async getAllCharacters({ commit }, data) {
-    let res = await axios.get("http://localhost:5000/api/characters");
+    let res = await axios.get("/api/characters");
     commit("setCharacters", res.data);
     return res;
   },

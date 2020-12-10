@@ -15,17 +15,14 @@ const actions = {
     commit("viewGuide", data);
   },
   async getAllGuides({ commit }, data) {
-    let res = await axios.get("http://localhost:5000/api/guides");
+    let res = await axios.get("/api/guides");
     commit("setGuides", res.data);
     return res;
   },
   async submitGuide({ commit }, data) {
     try {
       commit("guide_request");
-      let res = await axios.post(
-        "http://localhost:5000/api/guides/submit",
-        data
-      );
+      let res = await axios.post("/api/guides/submit", data);
       if (res.data.success !== undefined) {
         commit("guide_success");
       }
@@ -35,10 +32,7 @@ const actions = {
     }
   },
   async updateGuide({ commit }, data) {
-    let res = await axios.put(
-      `http://localhost:5000/api/guides/${data.id}`,
-      data
-    );
+    let res = await axios.put(`/api/guides/${data.id}`, data);
     return res;
   },
 };

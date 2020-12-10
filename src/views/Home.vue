@@ -158,7 +158,7 @@ export default {
     }
     .column-post {
       padding: 10px;
-      opacity: 100%;
+      // opacity: 100%;
 
       .post {
         height: 130px;

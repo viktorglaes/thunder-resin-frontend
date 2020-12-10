@@ -10,7 +10,7 @@ const getters = {
 
 const actions = {
   async getAllComments({ commit }, data) {
-    let res = await axios.get(`http://localhost:5000/api/comments?id=${data}`);
+    let res = await axios.get(`/api/comments?id=${data}`);
     commit("setComments", res.data);
     return res;
   },
@@ -18,10 +18,7 @@ const actions = {
   async createComment({ commit }, data) {
     try {
       commit("comment_request");
-      let res = await axios.post(
-        "http://localhost:5000/api/comments/create",
-        data
-      );
+      let res = await axios.post("/api/comments/create", data);
       if (res.data.success !== undefined) {
         commit("comment_success");
       }
